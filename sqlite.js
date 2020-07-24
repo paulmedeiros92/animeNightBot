@@ -92,3 +92,18 @@ exports.getLineup = () => {
     });
   });
 };
+
+exports.incEpisodes = (inc) => {
+  const updateQuery = `UPDATE lineup SET episode = episode + ${inc}`;
+  return new Promise((resolve, reject) => {
+    db.run(updateQuery, [], (err) => {
+      if (err) {
+        logger.error(`incEpisodes: ${err.message}`);
+        reject(err);
+      } else {
+        logger.info('incEpisodes: success');
+        resolve();
+      }
+    });
+  });
+};

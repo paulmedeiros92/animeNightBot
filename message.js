@@ -92,7 +92,7 @@ function lineupMsg(shows) {
 }
 
 exports.evaluateMsg = ({
-  channel, content, author, mentions
+  channel, content, author, mentions,
 }) => {
   const msg = content.toLowerCase();
   if (msg.includes('anime')) {
@@ -104,7 +104,11 @@ exports.evaluateMsg = ({
   } else if (author.id === ADMIN && msg.includes('add')) {
     addShow(msg, mentions);
   } else if (author.id === ADMIN && msg.includes('special')) {
-    specialAnnouncement(msg, channel);
+    if (msg.includes('update')) {
+      changeShow('Special', msg);
+    } else {
+      specialAnnouncement(msg, channel);
+    }
   } else {
     channel.send(canned.generalHow);
   }
