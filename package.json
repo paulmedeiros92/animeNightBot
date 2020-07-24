@@ -1,0 +1,28 @@
+{
+  "name": "animenightbot",
+  "version": "1.0.0",
+  "description": "Discord bot to inform people of the anime schedule, and mange slots.",
+  "main": "bot.js",
+  "scripts": {
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pung Madro",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "discord": "^0.8.2",
+    "discord.js": "^12.0.0",
+    "graphql": "^15.3.0",
+    "log4js": "^6.0.0",
+    "moment": "^2.27.0",
+    "node-cron": "^2.0.3",
+    "sqlite3": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2"
+  }
+}
