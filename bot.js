@@ -25,13 +25,13 @@ client.on('ready', () => {
   const targetChannels = Array.from(client.channels.cache.values())
     .filter((channel) => channel.type === 'text' && channel.name === 'anime-night');
   sqlite.openDB(dbPath).then(() => {
-    cron.schedule('* 10 * * 6', () => {
+    cron.schedule('0 10 * * 6', () => {
       logger.info('Weekly Anime Announcement');
       targetChannels.forEach((channel) => {
         message.sendLineup(channel);
       });
     });
-    cron.schedule('* * * * 7', () => {
+    cron.schedule('0 10 * * 7', () => {
       logger.info('New LineUp Message');
       const promises = [
         sqlite.incEpisodes('1'),

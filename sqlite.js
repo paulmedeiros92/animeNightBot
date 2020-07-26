@@ -94,9 +94,9 @@ exports.getLineup = () => {
 };
 
 exports.incEpisodes = (inc) => {
-  const updateQuery = `UPDATE lineup SET episode = episode + ${inc}`;
+  const updateQuery = 'UPDATE lineup SET episode = episode + ?';
   return new Promise((resolve, reject) => {
-    db.run(updateQuery, [], (err) => {
+    db.run(updateQuery, [inc], (err) => {
       if (err) {
         logger.error(`incEpisodes: ${err.message}`);
         reject(err);
