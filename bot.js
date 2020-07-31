@@ -26,7 +26,7 @@ client.login(args[0]);
 const dbPath = '../AnimeNightDB/AnimeNightDB.db';
 
 function pythonScript() {
-  const process = spawn(PYTHONPATH, [SCRIPTPATH, 'Pung', 'Madro']);
+  const process = spawn(PYTHONPATH, [SCRIPTPATH]);
   process.stdout.on('data', (data) => {
     logger.info(`Python: ${data.toString()}`);
   });
