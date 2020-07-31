@@ -1,8 +1,12 @@
 const Discord = require('discord.js');
 const log4js = require('log4js');
 const cron = require('node-cron');
+const { spawn } = require('child_process');
 const sqlite = require('./sqlite');
 const message = require('./message');
+
+const PYTHONPATH = 'animeNightScript\\animeNight\\Scripts\\python.exe';
+const SCRIPTPATH = 'animeNightScript\\animeSlurper.py';
 
 log4js.configure({
   appenders: {
@@ -21,6 +25,16 @@ const client = new Discord.Client();
 client.login(args[0]);
 const dbPath = '../AnimeNightDB/AnimeNightDB.db';
 
+function pythonScript() {
+  const process = spawn(PYTHONPATH, [SCRIPTPATH, 'Pung', 'Madro']);
+  process.stdout.on('data', (data) => {
+    logger.info(`Python: ${data.toString()}`);
+  });
+  process.stdout.on('error', (error) => {
+    logger.info(`Python Critical: ${error.toString()}`);
+  });
+}
+
 client.on('ready', () => {
   const targetChannels = Array.from(client.channels.cache.values())
     .filter((channel) => channel.type === 'text' && channel.name === 'anime-night');
@@ -30,6 +44,7 @@ client.on('ready', () => {
       targetChannels.forEach((channel) => {
         message.sendLineup(channel);
       });
+      pythonScript();
     });
     cron.schedule('0 10 * * 7', () => {
       logger.info('New LineUp Message');
