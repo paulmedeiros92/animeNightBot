@@ -1,23 +1,13 @@
 const moment = require('moment');
 const Discord = require('discord.js');
-const log4js = require('log4js');
+
 const canned = require('./canned-messages');
 const sqlite = require('./sqlite');
 const anilist = require('./anilist-api');
+const { BOTID, ADMIN } = require('./constants');
+const log4js = require('./logger');
 
-log4js.configure({
-  appenders: {
-    console: { type: 'console' },
-    activity: { type: 'file', filename: 'activity.log', category: 'activity' },
-  },
-  categories: {
-    default: { appenders: ['console', 'activity'], level: 'trace' },
-  },
-});
-const logger = log4js.getLogger('activity');
-
-const BOTID = '735214958618345513'; // Anime Night Bot ID
-const ADMIN = '283785573351686144';
+const logger = log4js.buildLogger();
 
 function buildEmbed(data) {
   let trailer = 'N/A';
@@ -63,9 +53,9 @@ function addShow(msg, mentions) {
   sqlite.addShow([
     Array.from(users.values())[0].id,
     showTitle,
-    position ? position : 99,
-    season ? season : 1,
-    episode ? episode : 1,
+    position || 99,
+    season || 1,
+    episode || 1,
   ]);
 }
 
@@ -75,7 +65,7 @@ function changeShow(userId, msg) {
   const showTitle = words.map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
   const season = parseInt(msg.match(/(s\d+e)/g)[0].slice(1, -1), 10);
   const episode = parseInt(msg.match(/(s\d+e\d+)/g)[0].match(/(e\d+)/g)[0].slice(1), 10);
-  sqlite.updateShow([showTitle, season ? season : 1, episode ? episode : 1, userId]);
+  sqlite.updateShow([showTitle, season || 1, episode || 1, userId]);
 }
 
 function lineupMsg(shows) {

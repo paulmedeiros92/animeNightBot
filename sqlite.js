@@ -1,16 +1,7 @@
-const log4js = require('log4js');
 const sqlite3 = require('sqlite3').verbose();
+const log4js = require('./logger');
 
-log4js.configure({
-  appenders: {
-    console: { type: 'console' },
-    activity: { type: 'file', filename: 'activity.log', category: 'activity' },
-  },
-  categories: {
-    default: { appenders: ['console', 'activity'], level: 'trace' },
-  },
-});
-const logger = log4js.getLogger('activity');
+const logger = log4js.buildLogger();
 let db = {};
 
 function createLineupTable() {

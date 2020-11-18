@@ -1,26 +1,15 @@
 const Discord = require('discord.js');
-const log4js = require('log4js');
 const cron = require('node-cron');
 const { spawn } = require('child_process');
+
+const {
+  PYTHONPATH, SLURPERPATH, BROADCASTPATH, TEXTCHANNEL,
+} = require('./constants');
 const sqlite = require('./sqlite');
 const message = require('./message');
+const log4js = require('./logger');
 
-const PYTHONPATH = 'animeNightScript\\animeNight\\Scripts\\python.exe';
-const SCRIPTPATH = 'animeNightScript\\animeSlurper.py';
-const BROADCASTSCRIPT = 'animeNightScript\\vlcPlayer.py';
-const TEXTCHANNEL = 'anime-night';
-
-log4js.configure({
-  appenders: {
-    console: { type: 'console' },
-    activity: { type: 'file', filename: 'activity.log', category: 'activity' },
-  },
-  categories: {
-    default: { appenders: ['console', 'activity'], level: 'trace' },
-  },
-});
-
-const logger = log4js.getLogger('activity');
+const logger = log4js.buildLogger();
 const args = process.argv.slice(2);
 
 const client = new Discord.Client();
@@ -46,7 +35,7 @@ client.on('ready', () => {
       targetChannels.forEach((channel) => {
         message.sendLineup(channel);
       });
-      pythonScript(SCRIPTPATH);
+      pythonScript(SLURPERPATH);
     });
     cron.schedule('55 19 * * 6', () => {
       logger.info('Announce Broadcast');
@@ -54,9 +43,9 @@ client.on('ready', () => {
         message.announceBroadcast(channel);
       });
     });
-    cron.schedule('15 11 * * 3', () => {
+    cron.schedule('0 20 * * 6', () => {
       logger.info('Begin Broadcast!');
-      pythonScript(BROADCASTSCRIPT);
+      pythonScript(BROADCASTPATH);
     });
     cron.schedule('0 10 * * 7', () => {
       logger.info('New LineUp Message');
