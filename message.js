@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const canned = require('./canned-messages');
 const sqlite = require('./sqlite');
 const anilist = require('./anilist-api');
-const { BOTID, ADMIN } = require('./constants');
+const { ADMIN, BOTID } = require('./constants');
 const log4js = require('./logger');
 
 const logger = log4js.buildLogger();
@@ -27,7 +27,7 @@ function buildEmbed(data) {
     );
 }
 
-function specialAnnouncement(msg, channel) {
+function lookupAnime(msg, channel) {
   const titles = msg.match(/"(.*?)"/g);
   titles.forEach((title) => {
     anilist.getAnimeInfo(title)
@@ -91,13 +91,13 @@ exports.evaluateMsg = ({
     });
   } else if (msg.includes('change')) {
     changeShow(author.id, msg);
+  } else if (msg.includes('lookup')) {
+    lookupAnime(msg, channel);
   } else if (author.id === ADMIN && msg.includes('add')) {
     addShow(msg, mentions);
   } else if (author.id === ADMIN && msg.includes('special')) {
     if (msg.includes('update')) {
       changeShow('Special', msg);
-    } else {
-      specialAnnouncement(msg, channel);
     }
   } else {
     channel.send(canned.generalHow);

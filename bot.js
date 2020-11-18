@@ -3,7 +3,7 @@ const cron = require('node-cron');
 const { spawn } = require('child_process');
 
 const {
-  PYTHONPATH, SLURPERPATH, BROADCASTPATH, TEXTCHANNEL,
+  DBPATH, PYTHONPATH, SLURPERPATH, BROADCASTPATH, TEXTCHANNEL,
 } = require('./constants');
 const sqlite = require('./sqlite');
 const message = require('./message');
@@ -14,8 +14,8 @@ const args = process.argv.slice(2);
 
 const client = new Discord.Client();
 client.login(args[0]);
-const dbPath = '../AnimeNightDB/AnimeNightDB.db';
 
+// Function to run the Python scripts
 function pythonScript(scriptPath) {
   const process = spawn(PYTHONPATH, [scriptPath]);
   process.stdout.on('data', (data) => {
@@ -26,44 +26,48 @@ function pythonScript(scriptPath) {
   });
 }
 
+// READY EVENT
 client.on('ready', () => {
   const targetChannels = Array.from(client.channels.cache.values())
     .filter((channel) => channel.type === 'text' && channel.name === TEXTCHANNEL);
-  sqlite.openDB(dbPath).then(() => {
-    cron.schedule('0 10 * * 6', () => {
-      logger.info('Weekly Anime Announcement');
-      targetChannels.forEach((channel) => {
-        message.sendLineup(channel);
-      });
-      pythonScript(SLURPERPATH);
-    });
-    cron.schedule('55 19 * * 6', () => {
-      logger.info('Announce Broadcast');
-      targetChannels.forEach((channel) => {
-        message.announceBroadcast(channel);
-      });
-    });
-    cron.schedule('0 20 * * 6', () => {
-      logger.info('Begin Broadcast!');
-      pythonScript(BROADCASTPATH);
-    });
-    cron.schedule('0 10 * * 7', () => {
-      logger.info('New LineUp Message');
-      const promises = [
-        sqlite.incEpisodes('1'),
-        sqlite.updateShow(['Mystery Show', 1, 1, 'Special']),
-      ];
-      Promise.all(promises)
-        .then(() => {
-          targetChannels.forEach((channel) => {
-            message.sendLineup(channel);
-          });
+  sqlite.openDB(DBPATH)
+    .then(() => {
+      cron.schedule('0 10 * * 6', () => {
+        logger.info('Weekly Anime Announcement');
+        targetChannels.forEach((channel) => {
+          message.sendLineup(channel);
         });
-    });
-    logger.info('Ready');
-  });
+        pythonScript(SLURPERPATH);
+      });
+      cron.schedule('55 19 * * 6', () => {
+        logger.info('Announce Broadcast');
+        targetChannels.forEach((channel) => {
+          message.announceBroadcast(channel);
+        });
+      });
+      cron.schedule('0 20 * * 6', () => {
+        logger.info('Begin Broadcast!');
+        pythonScript(BROADCASTPATH);
+      });
+      cron.schedule('0 10 * * 7', () => {
+        logger.info('New LineUp Message');
+        const promises = [
+          sqlite.incEpisodes('1'),
+          sqlite.updateShow(['Mystery Show', 1, 1, 'Special']),
+        ];
+        Promise.all(promises)
+          .then(() => {
+            targetChannels.forEach((channel) => {
+              message.sendLineup(channel);
+            });
+          });
+      });
+      logger.info('Ready');
+    })
+    .catch((error) => logger.error(error));
 });
 
+// MESSAGE EVENT
 client.on('message', (receivedMessage) => {
   if (receivedMessage.author !== client.user
     && receivedMessage.content.includes(client.user.id)) {

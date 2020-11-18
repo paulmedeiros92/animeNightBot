@@ -11,5 +11,4 @@ exports.buildLogger = () => {
     },
   });
   return log4js.getLogger('activity');
-
 };
