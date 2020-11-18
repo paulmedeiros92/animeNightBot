@@ -7,6 +7,8 @@ const message = require('./message');
 
 const PYTHONPATH = 'animeNightScript\\animeNight\\Scripts\\python.exe';
 const SCRIPTPATH = 'animeNightScript\\animeSlurper.py';
+const BROADCASTSCRIPT = 'animeNightScript\\vlcPlayer.py';
+const TEXTCHANNEL = 'anime-night';
 
 log4js.configure({
   appenders: {
@@ -25,8 +27,8 @@ const client = new Discord.Client();
 client.login(args[0]);
 const dbPath = '../AnimeNightDB/AnimeNightDB.db';
 
-function pythonScript() {
-  const process = spawn(PYTHONPATH, [SCRIPTPATH]);
+function pythonScript(scriptPath) {
+  const process = spawn(PYTHONPATH, [scriptPath]);
   process.stdout.on('data', (data) => {
     logger.info(`Python: ${data.toString()}`);
   });
@@ -37,14 +39,24 @@ function pythonScript() {
 
 client.on('ready', () => {
   const targetChannels = Array.from(client.channels.cache.values())
-    .filter((channel) => channel.type === 'text' && channel.name === 'anime-night');
+    .filter((channel) => channel.type === 'text' && channel.name === TEXTCHANNEL);
   sqlite.openDB(dbPath).then(() => {
     cron.schedule('0 10 * * 6', () => {
       logger.info('Weekly Anime Announcement');
       targetChannels.forEach((channel) => {
         message.sendLineup(channel);
       });
-      pythonScript();
+      pythonScript(SCRIPTPATH);
+    });
+    cron.schedule('55 19 * * 6', () => {
+      logger.info('Announce Broadcast');
+      targetChannels.forEach((channel) => {
+        message.announceBroadcast(channel);
+      });
+    });
+    cron.schedule('15 11 * * 3', () => {
+      logger.info('Begin Broadcast!');
+      pythonScript(BROADCASTSCRIPT);
     });
     cron.schedule('0 10 * * 7', () => {
       logger.info('New LineUp Message');

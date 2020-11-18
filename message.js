@@ -119,3 +119,7 @@ exports.sendLineup = (channel) => {
     channel.send(lineupMsg(rows));
   });
 };
+
+exports.announceBroadcast = (channel) => {
+  channel.send('Anime Night will start in 5 minutes @everyone!!!');
+};
