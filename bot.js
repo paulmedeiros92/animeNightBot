@@ -17,17 +17,18 @@ client.login(args[0]);
 
 // Function to run the Python scripts
 function pythonScript(scriptPath) {
-  const process = spawn(PYTHONPATH, [scriptPath]);
+  const process = spawn(PYTHONPATH, [scriptPath], { cwd: './animeNightScript' });
   process.stdout.on('data', (data) => {
     logger.info(`Python: ${data.toString()}`);
   });
   process.stdout.on('error', (error) => {
-    logger.info(`Python Critical: ${error.toString()}`);
+    logger.error(`Python Critical: ${error.toString()}`);
   });
 }
 
 // READY EVENT
 client.on('ready', () => {
+  pythonScript(SLURPERPATH);
   const targetChannels = Array.from(client.channels.cache.values())
     .filter((channel) => channel.type === 'text' && channel.name === TEXTCHANNEL);
   sqlite.openDB(DBPATH)

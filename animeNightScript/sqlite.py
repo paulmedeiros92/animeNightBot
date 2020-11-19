@@ -1,10 +1,11 @@
 import sys, os, sqlite3
 from sqlite3 import Error
 from dotenv import load_dotenv
+load_dotenv()
 from pathlib import Path
 
 # read from sqlite database and collect anime name and episode / season
-DATABASEPATH = Path("none")
+DATABASEPATH = Path(os.getenv("DBPATH"))
 
 def create_connection(db_file):
   if db_file.exists():

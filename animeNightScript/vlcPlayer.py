@@ -1,5 +1,6 @@
 import os, time
 from dotenv import load_dotenv
+load_dotenv()
 from pathlib import Path
 os.add_dll_directory(Path(os.getenv("VLCPATH")))
 import vlc

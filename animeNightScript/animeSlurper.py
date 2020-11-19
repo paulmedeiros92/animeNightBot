@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+load_dotenv()
 import feedparser
 import subprocess
 from pathlib import Path
