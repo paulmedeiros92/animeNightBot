@@ -10,6 +10,11 @@ from sqlite import get_all_shows
 OUTPATH = Path(os.getenv("OUTPATH"))
 TORRENTPATH = Path(os.getenv("TORRENTPATH"))
 ARIAPATH = Path(os.getenv("ARIAPATH"))
+ANIMEPATH = Path(os.getenv("ANIMEPATH"))
+
+# clean directory
+for file in os.listdir(ANIMEPATH):
+  os.remove(os.path.join(ANIMEPATH, file))
 
 shows = get_all_shows()
 
