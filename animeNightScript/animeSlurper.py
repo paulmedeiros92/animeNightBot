@@ -6,15 +6,15 @@ import subprocess
 from pathlib import Path
 
 from sqlite import get_all_shows
+import fileUtility
+from constants import BATCH_DIRECTORY_NAME
 
-OUTPATH = Path(os.getenv("OUTPATH"))
 TORRENTPATH = Path(os.getenv("TORRENTPATH"))
 ARIAPATH = Path(os.getenv("ARIAPATH"))
 ANIMEPATH = Path(os.getenv("ANIMEPATH"))
 
 # clean directory
-for file in os.listdir(ANIMEPATH):
-  os.remove(os.path.join(ANIMEPATH, file))
+fileUtility.clean_directory(ANIMEPATH, [BATCH_DIRECTORY_NAME])
 
 shows = get_all_shows()
 
@@ -39,7 +39,7 @@ for show in [n for n in shows if not (n[5] == 1)]:
 print("Writing torrents to file...")
 contents = ''
 for show in picks:
-  contents += show.link + "\n\tdir=" + str(OUTPATH.absolute()) + "\n\tseed-time=1\n"
+  contents += show.link + "\n\tdir=" + str(ANIMEPATH.absolute()) + "\n\tseed-time=1\n"
 
 f = open(TORRENTPATH, "w+")
 f.write(contents)

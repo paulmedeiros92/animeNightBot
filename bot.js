@@ -28,7 +28,6 @@ function pythonScript(scriptPath) {
 
 // READY EVENT
 client.on('ready', () => {
-  pythonScript(SLURPERPATH);
   const targetChannels = Array.from(client.channels.cache.values())
     .filter((channel) => channel.type === 'text' && channel.name === TEXTCHANNEL);
   sqlite.openDB(DBPATH)
