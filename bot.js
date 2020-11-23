@@ -32,7 +32,7 @@ client.on('ready', () => {
     .filter((channel) => channel.type === 'text' && channel.name === TEXTCHANNEL);
   sqlite.openDB(DBPATH)
     .then(() => {
-      cron.schedule('0 10 * * 6', () => {
+      cron.schedule('0 10 * * 5', () => {
         logger.info('Weekly Anime Announcement');
         targetChannels.forEach((channel) => {
           message.sendLineup(channel);

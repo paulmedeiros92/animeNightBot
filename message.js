@@ -70,7 +70,7 @@ function changeShow(userId, msg) {
 
 function lineupMsg(shows) {
   let date;
-  if (moment().isoWeekday() >= 6) {
+  if (moment().isoWeekday() > 6) {
     date = moment().add(1, 'weeks').isoWeekday(6);
   } else {
     date = moment().isoWeekday(6);

@@ -18,7 +18,7 @@ shows = match_shows_to_files(shows, files)
 
 shows.sort(key=lambda show: show.position)
 
-Instance = vlc.Instance('--fullscreen', '--mouse-hide-timeout=0')
+Instance = vlc.Instance()
 MediaList = Instance.media_list_new()
 duration = 0
 
@@ -27,6 +27,7 @@ for show in shows:
 
 listPlayer = Instance.media_list_player_new()
 mediaPlayer = listPlayer.get_media_player()
+mediaPlayer.video_set_mouse_input(True)
 mediaPlayer.toggle_fullscreen()
 listPlayer.set_media_list(MediaList)
 
