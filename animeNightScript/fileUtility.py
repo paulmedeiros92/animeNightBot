@@ -8,7 +8,7 @@ def clean_directory(directory, exceptions):
 # showName should be the database name which needs to match the folder name
 def search_for_show(directory, showName, episode):
   for show in os.listdir(directory / showName):
-    if re.search(f"\D{episode}\D", show) != None or (episode < 10 and re.search(f"\D0{episode}\D", show) != None):
+    if re.search(f"[\W]{episode}[\W]", show) != None or (episode < 10 and re.search(f"\W0{episode}\W", show) != None):
       return directory / showName / show
   print(f"Episode {episode} could not be found in: {directory / showName / show}")
   raise LookupError(f"Episode {episode} could not be found in: {directory / showName / show}")
