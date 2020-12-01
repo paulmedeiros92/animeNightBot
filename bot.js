@@ -3,7 +3,7 @@ const cron = require('node-cron');
 const { spawn } = require('child_process');
 
 const {
-  DBPATH, PYTHONPATH, SLURPERPATH, BROADCASTPATH, TEXTCHANNEL,
+  DBPATH, PYTHONPATH, SLURPERPATH, VLCSCRIPTPATH, TEXTCHANNEL,
 } = require('./constants');
 const sqlite = require('./sqlite');
 const message = require('./message');
@@ -33,21 +33,21 @@ client.on('ready', () => {
   sqlite.openDB(DBPATH)
     .then(() => {
       cron.schedule('0 10 * * 5', () => {
-        logger.info('Weekly Anime Announcement');
+        logger.info('Begin Download and Announce.');
         targetChannels.forEach((channel) => {
           message.sendLineup(channel);
         });
         pythonScript(SLURPERPATH);
       });
       cron.schedule('55 19 * * 6', () => {
-        logger.info('Announce Broadcast');
+        logger.info('Announce Broadcast.');
         targetChannels.forEach((channel) => {
           message.announceBroadcast(channel);
         });
       });
-      cron.schedule('0 20 * * 6', () => {
-        logger.info('Begin Broadcast!');
-        pythonScript(BROADCASTPATH);
+      cron.schedule('0 10 * * 6', () => {
+        logger.info('Build Playlist');
+        pythonScript(VLCSCRIPTPATH);
       });
       cron.schedule('0 10 * * 7', () => {
         logger.info('New LineUp Message');
