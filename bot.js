@@ -39,17 +39,17 @@ client.on('ready', () => {
         });
         pythonScript(SLURPERPATH);
       });
-      cron.schedule('55 19 * * 6', () => {
+      cron.schedule('55 19 * * 5', () => {
         logger.info('Announce Broadcast.');
         targetChannels.forEach((channel) => {
           message.announceBroadcast(channel);
         });
       });
-      cron.schedule('0 10 * * 6', () => {
+      cron.schedule('0 18 * * 5', () => {
         logger.info('Build Playlist');
         pythonScript(VLCSCRIPTPATH);
       });
-      cron.schedule('0 10 * * 7', () => {
+      cron.schedule('0 10 * * 6', () => {
         logger.info('New LineUp Message');
         const promises = [
           sqlite.incEpisodes('1'),
