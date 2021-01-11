@@ -23,9 +23,13 @@ picks = []
 print("Searching Nyaa.si")
 for show in [n for n in shows if not (n[5] == 1)]:
   title = show[1].replace(' ', '+')
+  season = str(show[3]) if show[3] > 9 else '0' + str(show[3])
   episode = str(show[4]) if show[4] > 9 else '0' + str(show[4]) 
-  text = title + "+" + episode
+  text = f"{title}+S{season}E{episode}"
   Anime = feedparser.parse("https://nyaa.si/?page=rss&f=0&c=1_2&q=" + text + "&s=seeders&o=desc")
+  if len(Anime.entries) == 0 and show[3] == 1:
+    text = f"{title}+{episode}"
+    Anime = feedparser.parse("https://nyaa.si/?page=rss&f=0&c=1_2&q=" + text + "&s=seeders&o=desc")    
   # find all the entries with the episode and then download the highest seeded one don't get batches
   clean = [n for n in Anime.entries if n.title.find(f" {episode} ") >= 0]
   if len(clean) > 0:

@@ -9,11 +9,12 @@ from show import Show
 from createPlaylist import create_playlist_file
 
 ANIMEPATH = Path(os.getenv("ANIMEPATH"))
+SERVERPATH = Path(os.getenv("SERVERPATH"))
 
 shows = [Show(show) for show in get_all_shows()]
-shows = set_batch_episodes(ANIMEPATH / BATCH_DIRECTORY_NAME, shows)
+shows = set_batch_episodes(ANIMEPATH / BATCH_DIRECTORY_NAME, SERVERPATH, shows)
 files = get_files(ANIMEPATH, [BATCH_DIRECTORY_NAME, ".torrent", ".aria2"])
-shows = match_shows_to_files(shows, files)
+shows = match_shows_to_files(SERVERPATH, shows, files)
 
 if len([show for show in shows if show.path == None]) > 0:
   print('FAILED TO FIND ALL SHOW FILES...SHUTTING DOWN!')

@@ -28,7 +28,7 @@ def create_playlist_file(path, str_title, shows):
   trackList = etree.SubElement(playlist, 'trackList')
   # Add to tracks to tracklist
   for i, show in enumerate(shows):
-    trackList.append(create_track(show.path, show.title + " " + str(show.episode), str(i)))
+    trackList.append(create_track(show.server_path, show.title + " " + str(show.episode), str(i)))
 
   playlist.append(create_extension_list(1))
   # Add VLC items with id
