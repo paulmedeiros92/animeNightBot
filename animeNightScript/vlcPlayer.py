@@ -12,7 +12,7 @@ ANIMEPATH = Path(os.getenv("ANIMEPATH"))
 SERVERPATH = Path(os.getenv("SERVERPATH"))
 
 shows = [Show(show) for show in get_all_shows()]
-shows = set_batch_episodes(ANIMEPATH / BATCH_DIRECTORY_NAME, SERVERPATH, shows)
+shows = set_batch_episodes(ANIMEPATH / BATCH_DIRECTORY_NAME, SERVERPATH / BATCH_DIRECTORY_NAME, shows)
 files = get_files(ANIMEPATH, [BATCH_DIRECTORY_NAME, ".torrent", ".aria2"])
 shows = match_shows_to_files(SERVERPATH, shows, files)
 

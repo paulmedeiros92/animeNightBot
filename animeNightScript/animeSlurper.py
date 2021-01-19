@@ -31,7 +31,7 @@ for show in [n for n in shows if not (n[5] == 1)]:
     text = f"{title}+{episode}"
     Anime = feedparser.parse("https://nyaa.si/?page=rss&f=0&c=1_2&q=" + text + "&s=seeders&o=desc")    
   # find all the entries with the episode and then download the highest seeded one don't get batches
-  clean = [n for n in Anime.entries if n.title.find(f" {episode} ") >= 0]
+  clean = [n for n in Anime.entries if n.title.find(f"{episode}") >= 0]
   if len(clean) > 0:
     print("I pick: " + clean[0].title)
     print(clean[0])

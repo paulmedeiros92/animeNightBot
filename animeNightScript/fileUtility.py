@@ -6,7 +6,7 @@ def clean_directory(directory, exceptions):
       os.remove(os.path.join(directory, file))
 
 def match_path_to_title_and_episode(title, episode, filePath):
-  if (re.search(f"[\W]{episode}[\W]", filePath) != None) or (episode < 10 and re.search(f"\D0{episode}\D", filePath) != None):
+  if (re.search(f"[\D]{episode}[\D]", filePath) != None) or (episode < 10 and re.search(f"\D0{episode}\D", filePath) != None):
     return True
 
   return False
