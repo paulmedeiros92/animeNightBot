@@ -70,10 +70,10 @@ function changeShow(userId, msg) {
 
 function lineupMsg(shows) {
   let date;
-  if (moment().isoWeekday() > 6) {
-    date = moment().add(1, 'weeks').isoWeekday(6);
+  if (moment().isoWeekday() > 5) {
+    date = moment().add(1, 'weeks').isoWeekday(5);
   } else {
-    date = moment().isoWeekday(6);
+    date = moment().isoWeekday(5);
   }
   const header = `\`\`\`LINEUP (${date.format('MMMM DD YYYY')} 8pm PDT):\n`;
   const content = shows.map((show) => `\t#${show.position} ${show.title} ~ Season ${show.season} Episode ${show.episode}`).join('\n');
