@@ -1,12 +1,10 @@
 import sys, os, sqlite3
 from sqlite3 import Error
-from dotenv import load_dotenv
-load_dotenv()
+import constants
 from pathlib import Path
+from show import Show
 
 # read from sqlite database and collect anime name and episode / season
-DATABASEPATH = Path(os.getenv("DBPATH"))
-
 def create_connection(db_file):
   if db_file.exists():
     conn = None
@@ -26,7 +24,8 @@ def select_all_shows(conn):
 
 def get_all_shows():
   print("Connecting to database...")
-  conn = create_connection(DATABASEPATH)
+  conn = create_connection(constants.DB_PATH)
   print("Successfully connected.")
   print("Selecting all shows..")
-  return select_all_shows(conn)
+  rows = select_all_shows(conn)
+  return [Show(n) for n in rows ]

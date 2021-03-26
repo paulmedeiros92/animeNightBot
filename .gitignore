@@ -3,3 +3,4 @@ node_modules/
 activity.log
 .env
 startup.bat
+torrents.txt

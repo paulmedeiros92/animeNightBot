@@ -5,16 +5,15 @@ def clean_directory(directory, exceptions):
     if file not in exceptions:
       os.remove(os.path.join(directory, file))
 
-def match_path_to_title_and_episode(title, episode, filePath):
+def match_path_to_episode(episode, filePath):
   if (re.search(f"[\D]{episode}[\D]", filePath) != None) or (episode < 10 and re.search(f"\D0{episode}\D", filePath) != None):
     return True
-
   return False
 
 # showName should be the database name which needs to match the folder name
 def search_for_show(directory, showName, episode):
   for fileName in os.listdir(directory / showName):
-    if match_path_to_title_and_episode(showName, episode, fileName):
+    if match_path_to_episode(episode, fileName):
       return (directory / showName / fileName)
 
   raise LookupError(f"Episode {episode} could not be found in: {directory / showName}")
@@ -35,7 +34,7 @@ def get_files(path, exceptions):
 def match_shows_to_files(server_path, shows, files):
   for show in [show for show in shows if show.has_batch != 1]:
     for file in files:
-      if match_path_to_title_and_episode(show.title, show.episode, str(file.absolute())):
+      if match_path_to_episode(show.episode, str(file.absolute())):
         show.path = file
         show.server_path = (server_path / file.name)
 
