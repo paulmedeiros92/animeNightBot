@@ -6,6 +6,8 @@ const sqlite = require('./sqlite');
 const anilist = require('./anilist-api');
 const { ADMIN, BOTID } = require('./constants');
 const log4js = require('./logger');
+const scriptServices = require('./script-services');
+const { SLURPERPATH, VLCSCRIPTPATH } = require('./constants');
 
 const logger = log4js.buildLogger();
 
@@ -81,6 +83,15 @@ function lineupMsg(shows) {
   return header + content + footer;
 }
 
+function runScript(scriptPath, channel) {
+  try {
+    scriptServices.pythonScript(scriptPath);
+    channel.send('Success');
+  } catch (error) {
+    channel.send(error.message);
+  }
+}
+
 exports.evaluateMsg = ({
   channel, content, author, mentions,
 }) => {
@@ -95,6 +106,10 @@ exports.evaluateMsg = ({
     lookupAnime(msg, channel);
   } else if (author.id === ADMIN && msg.includes('add')) {
     addShow(msg, mentions);
+  } else if (author.id === ADMIN && msg.includes('torrent')) {
+    runScript(SLURPERPATH, channel);
+  } else if (author.id === ADMIN && msg.includes('playlist')) {
+    addShow(VLCSCRIPTPATH, channel);
   } else if (author.id === ADMIN && msg.includes('special')) {
     if (msg.includes('update')) {
       changeShow('Special', msg);

@@ -1,5 +1,5 @@
 exports.DBPATH = '../AnimeNightDB/AnimeNightDB.db';
-exports.PYTHONPATH = 'animeNight/Scripts/python.exe';
+exports.PYTHONPATH = 'animeNightPython/Scripts/python.exe';
 exports.SLURPERPATH = 'animeSlurper.py';
 exports.TESTPATH = 'test.py';
 exports.VLCSCRIPTPATH = 'vlcPlayer.py';
